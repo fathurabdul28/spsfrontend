@@ -86,7 +86,11 @@ export default function Footer() {
               </div>
               <div className="contact-item">
                 <Phone size={18} />
-                <div>+6285862604177</div>
+                <div>
+                  <a href="https://wa.me/6285862604177" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    +6285862604177
+                  </a>
+                </div>
               </div>
               <div className="contact-item">
                 <Mail size={18} />

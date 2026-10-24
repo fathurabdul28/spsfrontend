@@ -237,15 +237,42 @@ export default function Blog() {
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.8rem', color: 'var(--color-text)' }}>Contact</h4>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <span>📞 +6285862604177</span>
+                    <a
+                      href="https://wa.me/6285862604177"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem', transition: 'color 0.2s' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+                    >
+                      <span>📞</span> +6285862604177
+                    </a>
                     <span>🌐 Follow us</span>
                   </div>
                 </div>
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.8rem', color: 'var(--color-text)' }}>Social</h4>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <span>TikTok: papeha</span>
-                    <span>Instagram: sehatipedulisesama</span>
+                    <a
+                      href="https://www.tiktok.com/@papeha"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+                    >
+                      TikTok: <span style={{ fontWeight: '600' }}>@papeha</span>
+                    </a>
+                    <a
+                      href="https://www.instagram.com/sehatipedulisesama/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+                    >
+                      Instagram: <span style={{ fontWeight: '600' }}>@sehatipedulisesama</span>
+                    </a>
                   </div>
                 </div>
               </div>

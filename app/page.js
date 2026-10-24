@@ -192,10 +192,10 @@ export default function Home() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
                   <div className="card-date" style={{ margin: 0 }}>
                     <Calendar size={13} /> {(() => {
-                      if (!prog.distribution_date) return 'Akan disalurkan: 28-29 Nov 2026'
+                      if (!prog.distribution_date) return 'Akan disalurkan: 21-22 Nov 2026'
                       const distDate = new Date(prog.distribution_date)
-                      const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
-                      const dateStr = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                      const isNov21 = distDate.getMonth() === 10 && (distDate.getDate() === 21 || distDate.getDate() === 22)
+                      const dateStr = isNov21 ? '21-22 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
                       const today = new Date(); today.setHours(0,0,0,0); distDate.setHours(0,0,0,0)
                       const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
                       return `Akan disalurkan: ${dateStr}${diffDays > 0 ? ` (H-${diffDays})` : ''}`

@@ -167,7 +167,9 @@ export default function DonasiSaya() {
                 if (distDate > today) {
                   const diffTime = distDate.getTime() - today.getTime();
                   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                  statusBadge = <span style={{ background: '#f59e0b', color: 'white', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>Akan disalurkan: {distDate.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'})} (H-{diffDays})</span>;
+                  const isNov21 = distDate.getMonth() === 10 && (distDate.getDate() === 21 || distDate.getDate() === 22);
+                  const dateText = isNov21 ? '21-22 Nov 2026' : distDate.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                  statusBadge = <span style={{ background: '#f59e0b', color: 'white', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>Akan disalurkan: {dateText} (H-{diffDays})</span>;
                 } else if (distDate.getTime() === today.getTime()) {
                   statusBadge = <span style={{ background: '#3b82f6', color: 'white', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>Proses penyaluran</span>;
                 } else {

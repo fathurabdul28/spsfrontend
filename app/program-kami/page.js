@@ -67,8 +67,8 @@ export default function ProgramKami() {
   const getFeaturedBadge = (prog) => {
     if (!prog?.distribution_date) return null
     const distDate = new Date(prog.distribution_date)
-    const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
-    const dateText = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+    const isNov21 = distDate.getMonth() === 10 && (distDate.getDate() === 21 || distDate.getDate() === 22)
+    const dateText = isNov21 ? '21-22 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
     const today = new Date()
     distDate.setHours(0, 0, 0, 0); today.setHours(0, 0, 0, 0)
     if (distDate > today) {
@@ -84,8 +84,8 @@ export default function ProgramKami() {
   const getCardBadge = (prog) => {
     if (!prog.distribution_date) return null
     const distDate = new Date(prog.distribution_date)
-    const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
-    const dateText = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+    const isNov21 = distDate.getMonth() === 10 && (distDate.getDate() === 21 || distDate.getDate() === 22)
+    const dateText = isNov21 ? '21-22 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
     const today = new Date()
     distDate.setHours(0, 0, 0, 0); today.setHours(0, 0, 0, 0)
     if (distDate > today) {
