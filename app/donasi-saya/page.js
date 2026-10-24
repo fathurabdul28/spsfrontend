@@ -109,7 +109,7 @@ export default function DonasiSaya() {
     date: new Date(d.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
     name: d.program?.title || 'Donasi Umum',
     amount: `RP ${new Intl.NumberFormat('id-ID').format(d.amount)}`,
-    method: d.payment_type === 'midtrans' ? 'Midtrans' : 'Transfer Manual',
+    method: 'Transfer Manual',
     status: getStatusText(d.status),
     statusBg: getStatusBg(d.status),
     statusColor: getStatusColor(d.status),

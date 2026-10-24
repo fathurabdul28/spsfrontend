@@ -25,11 +25,6 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/sehati.logo.png" sizes="any" />
       </head>
       <body className={montserrat.className}>
-        <Script
-          src="https://app.sandbox.midtrans.com/snap/snap.js"
-          data-client-key="SB-Mid-client-miZxRK0ORngEupw3"
-          strategy="beforeInteractive"
-        />
         <AOSInit />
         <AuthProvider>
           <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>

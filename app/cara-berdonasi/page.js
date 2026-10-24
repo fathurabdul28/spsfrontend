@@ -44,7 +44,7 @@ export default async function CaraBerdonasi() {
             margin: '0 auto'
           }}>
 
-            {/* Online Donation Card */}
+            {/* Donation Steps Card */}
             <div style={{
               background: 'var(--color-card-bg)',
               borderRadius: '20px',
@@ -55,35 +55,28 @@ export default async function CaraBerdonasi() {
               flexDirection: 'column'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                <div style={{ fontSize: '3rem' }}>💳</div>
+                <div style={{ fontSize: '3rem' }}>📝</div>
                 <div>
-                  <h2 style={{ fontSize: '1.6rem', fontWeight: '700', color: 'var(--color-text)', margin: 0 }}>Donasi Online</h2>
-                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: 0 }}>(Cepat & Instan dengan Midtrans)</p>
+                  <h2 style={{ fontSize: '1.6rem', fontWeight: '700', color: 'var(--color-text)', margin: 0 }}>Panduan Berdonasi</h2>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: 0 }}>Mudah, amanah & transparan</p>
                 </div>
               </div>
 
-              {/* Fake Logos for payment */}
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center', color: 'var(--color-text-muted)', fontSize: '0.9rem', fontWeight: '600' }}>
-                <span style={{ color: '#0056A3', fontSize: '1.2rem', fontWeight: 'bold' }}>| | midtrans</span>
-                <span style={{ color: '#00AED6' }}>gopay</span>
-                <span style={{ color: '#4C3494' }}>OVO</span>
-                <span style={{ color: '#118EEA' }}>DANA</span>
-                <span>🏦 Virtual Accounts</span>
-                <span>💳 Credit Cards</span>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem', flexGrow: 1 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginBottom: '3rem', flexGrow: 1 }}>
                 {[
-                  '🛒 Pilih Program.',
-                  '📝 Isi Data & Jumlah.',
-                  '💳 Pilih Metode Pembayaran Online.',
-                  '✅ Pembayaran Diverifikasi Otomatis.'
-                ].map((step, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 }}>
+                  { step: 'Pilih Program Kebaikan', desc: 'Tentukan program atau kegiatan sosial yang ingin Anda bantu.' },
+                  { step: 'Isi Data & Nominal Donasi', desc: 'Masukkan nama, kontak, dan jumlah donasi yang ingin disalurkan.' },
+                  { step: 'Transfer ke Rekening Resmi', desc: 'Kirimkan donasi sesuai nominal ke rekening resmi yayasan.' },
+                  { step: 'Unggah Bukti Transfer', desc: 'Unggah struk/screenshot transfer untuk diverifikasi oleh admin.' }
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0, marginTop: '2px' }}>
                       {i + 1}
                     </div>
-                    <span style={{ color: 'var(--color-text)', fontSize: '1.05rem' }}>{step}</span>
+                    <div>
+                      <div style={{ color: 'var(--color-text)', fontSize: '1.05rem', fontWeight: '600' }}>{item.step}</div>
+                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>{item.desc}</div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -100,7 +93,7 @@ export default async function CaraBerdonasi() {
                 textDecoration: 'none',
                 transition: 'opacity 0.2s'
               }}>
-                Donasi Sekarang Cepat (Online)
+                Berdonasi Sekarang
               </Link>
             </div>
 

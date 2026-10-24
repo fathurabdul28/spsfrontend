@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Home, Calendar, Heart, Share2, Search, Users, Shield, Target, ChevronDown, ArrowRight } from 'lucide-react'
+import { Home, Calendar, Heart, Share2, Search, Users, Shield, Target, ChevronDown, ArrowRight, MapPin, ExternalLink } from 'lucide-react'
 
 import { API_BASE_URL, getImageUrl } from '../../lib/config'
 
@@ -57,16 +57,10 @@ export default function ProgramDetail() {
     )
   }
 
-  const dummyDonors = [
-    { name: 'Hamba Allah', amount: 'Rp 50.000', date: 'Hari ini' },
-    { name: 'Wulan', amount: 'Rp 20.000', date: 'Hari ini' },
-    { name: 'Budi Santoso', amount: 'Rp 100.000', date: 'Kemarin' },
-    { name: 'Rina Pertiwi', amount: 'Rp 25.000', date: 'Kemarin' },
-  ]
-  const programDonors = dummyDonors
+  const programDonors = program?.recent_donations || []
 
   const filteredDonors = programDonors.filter(d =>
-    d.name.toLowerCase().includes(searchQuery.toLowerCase())
+    d.name?.toLowerCase().includes(searchQuery.toLowerCase())
   )
   const visibleDonors = showAllDonors ? filteredDonors : filteredDonors.slice(0, 2)
 
@@ -157,7 +151,37 @@ export default function ProgramDetail() {
             </h1>
             <div style={{ width: '40px', height: '3px', background: 'var(--color-primary)', borderRadius: '2px', marginBottom: '1rem' }} />
 
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: '1.7', marginBottom: '1.6rem' }}>
+            {/* Lokasi Camping / Kegiatan */}
+            {(program.location || program.location_url) && (
+              <div style={{ marginBottom: '1.2rem' }}>
+                <a
+                  href={program.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    background: 'rgba(140, 21, 50, 0.08)',
+                    color: 'var(--color-primary)',
+                    padding: '0.55rem 1.1rem',
+                    borderRadius: '8px',
+                    fontSize: '0.88rem',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    border: '1.5px solid rgba(140, 21, 50, 0.25)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  title="Buka lokasi di Google Maps"
+                >
+                  <MapPin size={16} />
+                  <span>Lokasi: {program.location || 'Kampung Bamboe, Bandung'}</span>
+                  <ExternalLink size={14} style={{ marginLeft: '4px' }} />
+                </a>
+              </div>
+            )}
+
+            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: '1.7', marginBottom: '1.6rem', whiteSpace: 'pre-line' }}>
               {program.description}
             </p>
 
@@ -291,6 +315,26 @@ export default function ProgramDetail() {
                 </div>
               </div>
 
+              {/* Lokasi Camping */}
+              {(program.location || program.location_url) && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.4rem' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(140, 21, 50, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+                    <MapPin size={16} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>Lokasi Camping</p>
+                    <a
+                      href={program.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--color-primary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      {program.location || 'Kampung Bamboe, Bandung'} ↗
+                    </a>
+                  </div>
+                </div>
+              )}
+
               {/* Donasi Button */}
               <Link href={`/donatur?program=${slug}`} style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
@@ -346,74 +390,124 @@ export default function ProgramDetail() {
               <h2 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--color-text)' }}>
                 Daftar Donatur {program.title}
               </h2>
-              <div style={{ position: 'relative' }}>
-                <Search size={14} style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#aaa' }} />
-                <input
-                  type="text"
-                  placeholder="Cari nama donatur..."
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  style={{
-                    padding: '0.52rem 2.4rem 0.52rem 1rem',
-                    borderRadius: '9999px',
-                    border: '1.5px solid var(--color-card-border)',
-                    outline: 'none', fontSize: '0.82rem',
-                    background: 'var(--background)', color: 'var(--color-text)',
-                    width: '200px'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Table */}
-            <div style={{ background: 'var(--color-card-bg)', borderRadius: '14px', border: '1px solid var(--color-card-border)', overflow: 'hidden' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ background: 'var(--background)' }}>
-                    <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Nama Donatur</th>
-                    <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Jumlah Donasi</th>
-                    <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Waktu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visibleDonors.length > 0 ? visibleDonors.map((donor, idx) => (
-                    <tr key={idx} style={{ borderBottom: idx < visibleDonors.length - 1 ? '1px solid var(--color-card-border)' : 'none' }}>
-                      <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: idx % 2 === 0 ? '#fce8ef' : '#e8f5e0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: idx % 2 === 0 ? '#c14670' : '#1a9e5c', flexShrink: 0, fontSize: '0.75rem', fontWeight: '700' }}>
-                          {donor.name.charAt(0)}
-                        </div>
-                        {donor.name}
-                      </td>
-                      <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text)' }}>{donor.amount}</td>
-                      <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{donor.date}</td>
-                    </tr>
-                  )) : (
-                    <tr>
-                      <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', fontSize: '0.85rem', color: '#aaa' }}>Donatur tidak ditemukan</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-
-              {/* Lihat Semua button */}
-              {filteredDonors.length > 2 && (
-                <div style={{ borderTop: '1px solid var(--color-card-border)', padding: '0.7rem', textAlign: 'center' }}>
-                  <button
-                    onClick={() => setShowAllDonors(!showAllDonors)}
+              {programDonors.length > 0 && (
+                <div style={{ position: 'relative' }}>
+                  <Search size={14} style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#aaa' }} />
+                  <input
+                    type="text"
+                    placeholder="Cari nama donatur..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
                     style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                      background: 'transparent', border: '1.5px solid var(--color-card-border)',
-                      borderRadius: '9999px', padding: '0.45rem 1.2rem',
-                      fontSize: '0.82rem', fontWeight: '600', color: 'var(--color-text)',
-                      cursor: 'pointer'
+                      padding: '0.52rem 2.4rem 0.52rem 1rem',
+                      borderRadius: '9999px',
+                      border: '1.5px solid var(--color-card-border)',
+                      outline: 'none', fontSize: '0.82rem',
+                      background: 'var(--background)', color: 'var(--color-text)',
+                      width: '200px'
                     }}
-                  >
-                    {showAllDonors ? 'Sembunyikan' : 'Lihat Semua Donatur'}
-                    <ChevronDown size={14} style={{ transform: showAllDonors ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-                  </button>
+                  />
                 </div>
               )}
             </div>
+
+            {programDonors.length === 0 ? (
+              <div style={{
+                background: 'var(--color-card-bg)',
+                borderRadius: '14px',
+                border: '1px solid var(--color-card-border)',
+                padding: '2.5rem 1.5rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: 'rgba(140, 21, 50, 0.08)',
+                  color: 'var(--color-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 0.75rem'
+                }}>
+                  <Heart size={20} />
+                </div>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--color-text)', marginBottom: '0.3rem' }}>
+                  Belum Ada Donatur
+                </h3>
+                <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '1.2rem', maxWidth: '340px', margin: '0 auto 1.2rem' }}>
+                  Dana terkumpul masih Rp 0. Jadilah orang pertama yang berdonasi dan ikut serta dalam kegiatan {program.title}!
+                </p>
+                <Link
+                  href={`/donatur?program=${slug}`}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    background: 'var(--color-primary)',
+                    color: '#fff',
+                    padding: '0.6rem 1.4rem',
+                    borderRadius: '9999px',
+                    fontWeight: '700',
+                    fontSize: '0.82rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(140,21,50,0.25)'
+                  }}
+                >
+                  Donasi Sekarang <ArrowRight size={13} />
+                </Link>
+              </div>
+            ) : (
+              /* Table */
+              <div style={{ background: 'var(--color-card-bg)', borderRadius: '14px', border: '1px solid var(--color-card-border)', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ background: 'var(--background)' }}>
+                      <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Nama Donatur</th>
+                      <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Jumlah Donasi</th>
+                      <th style={{ padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.82rem', fontWeight: '700', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-card-border)' }}>Waktu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visibleDonors.length > 0 ? visibleDonors.map((donor, idx) => (
+                      <tr key={idx} style={{ borderBottom: idx < visibleDonors.length - 1 ? '1px solid var(--color-card-border)' : 'none' }}>
+                        <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: idx % 2 === 0 ? '#fce8ef' : '#e8f5e0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: idx % 2 === 0 ? '#c14670' : '#1a9e5c', flexShrink: 0, fontSize: '0.75rem', fontWeight: '700' }}>
+                            {donor.name.charAt(0)}
+                          </div>
+                          {donor.name}
+                        </td>
+                        <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text)' }}>{donor.amount}</td>
+                        <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{donor.date}</td>
+                      </tr>
+                    )) : (
+                      <tr>
+                        <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', fontSize: '0.85rem', color: '#aaa' }}>Donatur tidak ditemukan</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+
+                {/* Lihat Semua button */}
+                {filteredDonors.length > 2 && (
+                  <div style={{ borderTop: '1px solid var(--color-card-border)', padding: '0.7rem', textAlign: 'center' }}>
+                    <button
+                      onClick={() => setShowAllDonors(!showAllDonors)}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                        background: 'transparent', border: '1.5px solid var(--color-card-border)',
+                        borderRadius: '9999px', padding: '0.45rem 1.2rem',
+                        fontSize: '0.82rem', fontWeight: '600', color: 'var(--color-text)',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {showAllDonors ? 'Sembunyikan' : 'Lihat Semua Donatur'}
+                      <ChevronDown size={14} style={{ transform: showAllDonors ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right: Ajakan card */}

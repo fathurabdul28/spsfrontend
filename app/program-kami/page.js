@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Users, GraduationCap, Activity, Home, HeartHandshake, Search, Heart, Share2, Calendar } from 'lucide-react'
+import { Users, GraduationCap, Activity, Home, HeartHandshake, Search, Heart, Share2, Calendar, MapPin } from 'lucide-react'
 import { API_BASE_URL } from '../lib/config'
 
 export default function ProgramKami() {
@@ -67,11 +67,13 @@ export default function ProgramKami() {
   const getFeaturedBadge = (prog) => {
     if (!prog?.distribution_date) return null
     const distDate = new Date(prog.distribution_date)
+    const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
+    const dateText = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
     const today = new Date()
     distDate.setHours(0, 0, 0, 0); today.setHours(0, 0, 0, 0)
     if (distDate > today) {
       const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-      return { text: `Akan disalurkan: ${distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} (H-${diffDays})`, color: '#1a9e5c', bg: '#e6f9f0' }
+      return { text: `Akan disalurkan: ${dateText} (H-${diffDays})`, color: '#1a9e5c', bg: '#e6f9f0' }
     } else if (distDate.getTime() === today.getTime()) {
       return { text: 'Proses penyaluran', color: '#2563eb', bg: '#eff6ff' }
     } else {
@@ -82,11 +84,13 @@ export default function ProgramKami() {
   const getCardBadge = (prog) => {
     if (!prog.distribution_date) return null
     const distDate = new Date(prog.distribution_date)
+    const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
+    const dateText = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
     const today = new Date()
     distDate.setHours(0, 0, 0, 0); today.setHours(0, 0, 0, 0)
     if (distDate > today) {
       const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-      return { text: `Akan disalurkan: ${distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} (H-${diffDays})`, type: 'upcoming' }
+      return { text: `Akan disalurkan: ${dateText} (H-${diffDays})`, type: 'upcoming' }
     } else if (distDate.getTime() === today.getTime()) {
       return { text: 'Proses penyaluran', type: 'today' }
     } else {
@@ -171,9 +175,38 @@ export default function ProgramKami() {
                 </div>
               )}
 
-              <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', lineHeight: '1.7', marginBottom: '1.8rem' }}>
+              <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', lineHeight: '1.7', marginBottom: '1.2rem', whiteSpace: 'pre-line' }}>
                 {featuredProgram.description}
               </p>
+
+              {(featuredProgram.location || featuredProgram.location_url) && (
+                <div style={{ marginBottom: '1.6rem' }}>
+                  <a
+                    href={featuredProgram.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      background: 'rgba(140, 21, 50, 0.08)',
+                      color: 'var(--color-primary)',
+                      padding: '0.4rem 0.95rem',
+                      borderRadius: '8px',
+                      fontSize: '0.84rem',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      border: '1px solid rgba(140, 21, 50, 0.25)',
+                      transition: 'all 0.2s'
+                    }}
+                    title="Buka lokasi di Google Maps"
+                  >
+                    <MapPin size={15} />
+                    <span>Lokasi: {featuredProgram.location || 'Kampung Bamboe, Bandung'}</span>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>↗</span>
+                  </a>
+                </div>
+              )}
 
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <Link
@@ -347,14 +380,45 @@ export default function ProgramKami() {
                       </span>
                     )}
                     <h3 style={{ fontSize: '0.97rem', fontWeight: '700', marginBottom: '0.35rem', color: 'var(--color-text)' }}>{prog.title}</h3>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: '1.5', marginBottom: '0.9rem', flex: 1 }}>{prog.description}</p>
-                    <Link href={`/program-kami/${prog.slug}`} style={{
-                      display: 'block', textAlign: 'center', background: 'var(--color-primary)', color: '#fff',
-                      padding: '0.62rem', borderRadius: '8px', fontWeight: '600', fontSize: '0.85rem',
-                      textDecoration: 'none'
-                    }}>
-                      Selengkapnya
-                    </Link>
+                    {(prog.location || prog.location_url) && (
+                      <div style={{ marginBottom: '0.85rem' }}>
+                        <a
+                          href={prog.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            color: 'var(--color-primary)',
+                            fontSize: '0.78rem',
+                            fontWeight: '700',
+                            textDecoration: 'none'
+                          }}
+                          title="Buka lokasi di Google Maps"
+                        >
+                          <MapPin size={13} />
+                          <span>{prog.location || 'Kampung Bamboe, Bandung'} ↗</span>
+                        </a>
+                      </div>
+                    )}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: 'auto' }}>
+                      <Link href={`/donatur?program=${prog.slug}`} style={{
+                        textAlign: 'center', background: 'var(--color-primary)', color: '#fff',
+                        padding: '0.62rem 0.5rem', borderRadius: '8px', fontWeight: '700', fontSize: '0.85rem',
+                        textDecoration: 'none'
+                      }}>
+                        Donasi
+                      </Link>
+                      <Link href={`/program-kami/${prog.slug}`} style={{
+                        textAlign: 'center', background: 'transparent', color: 'var(--color-text)',
+                        border: '1.5px solid var(--color-card-border)',
+                        padding: '0.62rem 0.5rem', borderRadius: '8px', fontWeight: '600', fontSize: '0.85rem',
+                        textDecoration: 'none'
+                      }}>
+                        Detail
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )

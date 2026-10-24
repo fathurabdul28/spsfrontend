@@ -237,16 +237,15 @@ export default function Blog() {
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.8rem', color: 'var(--color-text)' }}>Contact</h4>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <span>📞 Contact info</span>
-                    <span>✉️ Sehati Peduli</span>
+                    <span>📞 +6285862604177</span>
                     <span>🌐 Follow us</span>
                   </div>
                 </div>
                 <div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.8rem', color: 'var(--color-text)' }}>Social</h4>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <span>Facebook</span>
-                    <span>Instagram</span>
+                    <span>TikTok: papeha</span>
+                    <span>Instagram: sehatipedulisesama</span>
                   </div>
                 </div>
               </div>

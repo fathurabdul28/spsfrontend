@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Heart, Activity, HomeIcon, HeartHandshake, ChevronLeft, ChevronRight, ArrowRight, Play, Calendar, CheckCircle2, UserCheck, ShieldCheck } from 'lucide-react'
+import { Heart, Activity, HomeIcon, HeartHandshake, ChevronLeft, ChevronRight, ArrowRight, Play, Calendar, CheckCircle2, UserCheck, ShieldCheck, MapPin } from 'lucide-react'
 
 import { API_BASE_URL, getImageUrl } from './lib/config'
 
@@ -84,8 +84,43 @@ export default function Home() {
         <div className="hero-content" data-aos="fade-right">
           <h1 className="hero-title">Bersama kita wujudkan masa depan yang lebih baik</h1>
           <p className="hero-subtitle">Dukungan Anda hari ini, harapan mereka esok hari.</p>
+          {currentHeroProgram && (currentHeroProgram.location || currentHeroProgram.location_url) && (
+            <div style={{ marginBottom: '1.25rem' }}>
+              <a
+                href={currentHeroProgram.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  background: 'rgba(255, 255, 255, 0.16)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#fff',
+                  padding: '0.4rem 0.95rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.85rem',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
+                  transition: 'background 0.2s'
+                }}
+                title="Buka lokasi di Google Maps"
+              >
+                <MapPin size={15} />
+                <span>Lokasi: {currentHeroProgram.location || 'Kampung Bamboe, Bandung'}</span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>↗</span>
+              </a>
+            </div>
+          )}
           <div className="hero-buttons">
-            <Link href="/donatur" className="btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>Donasi Sekarang</Link>
+            <Link
+              href={currentHeroProgram ? `/donatur?program=${currentHeroProgram.slug}` : '/donatur'}
+              className="btn-primary"
+              style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}
+            >
+              Donasi Sekarang
+            </Link>
             {currentHeroProgram && (
               <Link href={`/program-kami/${currentHeroProgram.slug}`} className="btn-play" style={{ textDecoration: 'none' }}>
                 <span className="play-icon"><Play size={20} style={{ marginLeft: '4px' }} /></span>
@@ -102,11 +137,11 @@ export default function Home() {
               <div className="hero-floating-stats">
                 <div className="stat-item">
                   <h4>Terkumpul</h4>
-                  <p>Rp {parseFloat(currentHeroProgram.collected_amount || 0).toLocaleString('id-ID')}</p>
+                  <p>Rp {parseFloat(currentHeroProgram.collected_amount ?? currentHeroProgram.collected_raw ?? 0).toLocaleString('id-ID')}</p>
                 </div>
                 <div className="stat-item">
                   <h4>Target</h4>
-                  <p>Rp {parseFloat(currentHeroProgram.target_amount || 50000000).toLocaleString('id-ID')}</p>
+                  <p>Rp {parseFloat(currentHeroProgram.target_amount ?? currentHeroProgram.target_raw ?? 35000000).toLocaleString('id-ID')}</p>
                 </div>
                 <div className="stat-progress">
                   <div className="progress-text">{currentHeroProgram.progress || 0}% Terkumpul</div>
@@ -123,7 +158,7 @@ export default function Home() {
                   <img src="/avatars/3.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
                 </div>
                 <span className="donator-text">245+ Donatur telah bergabung</span>
-                <Link href={`/program-kami/${currentHeroProgram.slug}`} className="btn-arrow" style={{ display: 'flex', textDecoration: 'none' }}>
+                <Link href={`/donatur?program=${currentHeroProgram.slug}`} className="btn-arrow" style={{ display: 'flex', textDecoration: 'none' }} title="Donasi untuk program ini">
                   <ChevronRight size={20} />
                 </Link>
               </div>
@@ -154,8 +189,37 @@ export default function Home() {
                 </div>
               </div>
               <div className="card-content">
-                <div className="card-date">
-                  <Calendar size={14} /> Akan disalurkan: 15 Agu 2026 (H-8)
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+                  <div className="card-date" style={{ margin: 0 }}>
+                    <Calendar size={13} /> {(() => {
+                      if (!prog.distribution_date) return 'Akan disalurkan: 28-29 Nov 2026'
+                      const distDate = new Date(prog.distribution_date)
+                      const isNov28 = distDate.getMonth() === 10 && (distDate.getDate() === 28 || distDate.getDate() === 29)
+                      const dateStr = isNov28 ? '28-29 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                      const today = new Date(); today.setHours(0,0,0,0); distDate.setHours(0,0,0,0)
+                      const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+                      return `Akan disalurkan: ${dateStr}${diffDays > 0 ? ` (H-${diffDays})` : ''}`
+                    })()}
+                  </div>
+                  {(prog.location || prog.location_url) && (
+                    <a
+                      href={prog.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        fontSize: '0.75rem',
+                        fontWeight: '700',
+                        color: 'var(--color-primary)',
+                        textDecoration: 'none'
+                      }}
+                      title="Buka lokasi di Google Maps"
+                    >
+                      <MapPin size={12} /> {prog.location || 'Kampung Bamboe, Bandung'} ↗
+                    </a>
+                  )}
                 </div>
                 <h3 className="card-title">{prog.title}</h3>
                 <p className="card-desc">{prog.description}</p>
@@ -163,7 +227,10 @@ export default function Home() {
                   <div>
                     <div className="card-target-label">Target: <span className="card-target-val">Rp {parseFloat(prog.target_amount || 50000000).toLocaleString('id-ID')}</span></div>
                   </div>
-                  <Link href={`/program-kami/${prog.slug}`} className="btn-primary" style={{ padding: '0.4rem 1.2rem', fontSize: '0.8rem' }}>Selengkapnya &rarr;</Link>
+                  <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                    <Link href={`/donatur?program=${prog.slug}`} className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}>Donasi</Link>
+                    <Link href={`/program-kami/${prog.slug}`} className="btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>Detail</Link>
+                  </div>
                 </div>
               </div>
             </div>
