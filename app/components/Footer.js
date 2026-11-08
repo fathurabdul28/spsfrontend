@@ -16,13 +16,12 @@ export default function Footer() {
     <footer style={{ marginTop: '2rem' }}>
       {/* CTA Banner */}
       <div className="footer-cta">
-        <Heart className="footer-cta-icon" size={60} strokeWidth={1.5} />
         <div className="footer-cta-content">
           <h3>Yuk, jadi bagian dari kebaikan</h3>
           <p>Setiap donasi Anda, membawa harapan baru.</p>
         </div>
-        <Link href="/donatur" className="btn-primary btn-light" style={{ padding: '0.8rem 2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
-          Donasi Sekarang <span style={{ fontSize: '1.2rem' }}>&rarr;</span>
+        <Link href="/donatur" className="btn-primary btn-light btn-lg">
+          Donasi Sekarang <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
 
@@ -30,16 +29,16 @@ export default function Footer() {
       <div className="footer-main">
         {/* Brand Col */}
         <div className="footer-col brand-col">
-          <Link href="/" className="logo-container" style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <div className="logo-img-wrapper" style={{ width: '32px', height: '32px', position: 'relative' }}>
-              <Image src="/sehati.logo.png" alt="Logo" fill sizes="32px" style={{ objectFit: 'contain' }} />
+          <Link href="/" className="logo-container">
+            <div className="logo-img-wrapper">
+              <Image src="/sehati.logo.png" alt="Logo" fill sizes="36px" style={{ objectFit: 'contain' }} />
             </div>
-            <span style={{ fontWeight: 700, fontSize: '1.2rem', color: 'var(--color-text)' }}>Sehati Peduli</span>
+            <span>Sehati Peduli</span>
           </Link>
           <p className="footer-desc">
             Sehati Peduli Sesama - Memberikan Bantuan dan dukungan bagi anak yatim, korban bencana, dan masyarakat yang membutuhkan.
           </p>
-          <div className="social-links" style={{ gap: '0.75rem', marginBottom: '2rem' }}>
+          <div className="social-links">
             <a
               href="https://www.instagram.com/sehatipedulisesama/"
               target="_blank"
@@ -73,7 +72,7 @@ export default function Footer() {
         <div className="footer-accordions">
           {/* Contact Col */}
           <div className="footer-col">
-            <h4 onClick={() => toggleSection('kantor')} className="footer-heading">Kantor Pusat <ChevronDown className={`accordion-icon ${openSection === 'kantor' ? 'open' : ''}`} size={18} /></h4>
+            <h4 onClick={() => toggleSection('kantor')} className="footer-heading" role="button">Kantor Pusat <ChevronDown className={`accordion-icon ${openSection === 'kantor' ? 'open' : ''}`} size={18} /></h4>
             <div className={`footer-content ${openSection === 'kantor' ? 'show' : ''}`}>
               <div className="contact-item">
                 <MapPin size={18} />
@@ -87,7 +86,7 @@ export default function Footer() {
               <div className="contact-item">
                 <Phone size={18} />
                 <div>
-                  <a href="https://wa.me/6285862604177" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <a href="https://wa.me/6285862604177" target="_blank" rel="noopener noreferrer">
                     +6285862604177
                   </a>
                 </div>
@@ -101,26 +100,26 @@ export default function Footer() {
 
           {/* Program Links */}
           <div className="footer-col">
-            <h4 onClick={() => toggleSection('program')} className="footer-heading">Program Donasi <ChevronDown className={`accordion-icon ${openSection === 'program' ? 'open' : ''}`} size={18} /></h4>
+            <h4 onClick={() => toggleSection('program')} className="footer-heading" role="button">Program Donasi <ChevronDown className={`accordion-icon ${openSection === 'program' ? 'open' : ''}`} size={18} /></h4>
             <div className={`footer-content ${openSection === 'program' ? 'show' : ''}`}>
               <ul className="footer-links">
-                <li><Link href="/program-kami">› Camping Ceria</Link></li>
-                <li><Link href="/program-kami">› Layanan Kesehatan</Link></li>
-                <li><Link href="/program-kami">› Tanggap Bencana</Link></li>
-                <li><Link href="/program-kami">› Pemberdayaan UMKM</Link></li>
+                <li><Link href="/program-kami">Camping Ceria</Link></li>
+                <li><Link href="/program-kami">Layanan Kesehatan</Link></li>
+                <li><Link href="/program-kami">Tanggap Bencana</Link></li>
+                <li><Link href="/program-kami">Pemberdayaan UMKM</Link></li>
               </ul>
             </div>
           </div>
 
           {/* Other Links */}
           <div className="footer-col">
-            <h4 onClick={() => toggleSection('tautan')} className="footer-heading">Tautan Lainnya <ChevronDown className={`accordion-icon ${openSection === 'tautan' ? 'open' : ''}`} size={18} /></h4>
+            <h4 onClick={() => toggleSection('tautan')} className="footer-heading" role="button">Tautan Lainnya <ChevronDown className={`accordion-icon ${openSection === 'tautan' ? 'open' : ''}`} size={18} /></h4>
             <div className={`footer-content ${openSection === 'tautan' ? 'show' : ''}`}>
               <ul className="footer-links">
-                <li><Link href="/">› Beranda</Link></li>
-                <li><Link href="/tentang-kami">› Tentang Kami</Link></li>
-                <li><Link href="/cara-berdonasi">› Cara Berdonasi</Link></li>
-                <li><Link href="/berita">› Blog & Berita</Link></li>
+                <li><Link href="/">Beranda</Link></li>
+                <li><Link href="/tentang-kami">Tentang Kami</Link></li>
+                <li><Link href="/cara-berdonasi">Cara Berdonasi</Link></li>
+                <li><Link href="/berita">Blog & Berita</Link></li>
               </ul>
             </div>
           </div>
@@ -130,7 +129,7 @@ export default function Footer() {
       {/* Footer Bottom */}
       <div className="footer-bottom">
         <div>© 2026 Sehati Peduli Sesama. All rights reserved.</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text)' }}>
+        <div>
           Kepedulian kecil, perubahan besar. <Heart size={14} />
         </div>
       </div>

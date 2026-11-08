@@ -1,17 +1,18 @@
-import { Montserrat } from 'next/font/google'
-import Link from 'next/link'
-import Image from 'next/image'
-import Script from 'next/script'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 
 import { ThemeProvider } from './components/ThemeProvider'
 import HeaderNav from './components/HeaderNav'
 import Footer from './components/Footer'
+import MobileCta from './components/MobileCta'
 import { AuthProvider } from './context/AuthContext'
 
-import AOSInit from './components/AOSInit'
-
-const montserrat = Montserrat({ subsets: ['latin'], weight: ['400', '500', '600'] })
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-jakarta',
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'Sehati Peduli Sesama - Bersama Kita Membangun Harapan',
@@ -20,20 +21,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning className={jakarta.variable}>
       <head>
         <link rel="icon" href="/sehati.logo.png" sizes="any" />
       </head>
-      <body className={montserrat.className}>
-        <AOSInit />
+      <body>
         <AuthProvider>
           <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
             <div className="container">
               <HeaderNav />
-
-              <main style={{ position: 'relative', zIndex: 1, paddingTop: '1rem' }}>{children}</main>
-
+              <main>{children}</main>
               <Footer />
+              <MobileCta />
             </div>
           </ThemeProvider>
         </AuthProvider>

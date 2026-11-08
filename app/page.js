@@ -3,9 +3,32 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Heart, Activity, HomeIcon, HeartHandshake, ChevronLeft, ChevronRight, ArrowRight, Play, Calendar, CheckCircle2, UserCheck, ShieldCheck, MapPin } from 'lucide-react'
+import { ArrowRight, Calendar, CheckCircle2, ShieldCheck, MapPin, Heart, GraduationCap, Activity, Home as HomeIcon, HeartHandshake, Users, Search, Wallet, Upload } from 'lucide-react'
+import Reveal from './components/Reveal'
 
 import { API_BASE_URL, getImageUrl } from './lib/config'
+import { getDistributionInfo } from './lib/distribution'
+
+const DEFAULT_MAPS_URL = 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'
+const DEFAULT_LOCATION = 'Kampung Bamboe, Bandung'
+const DEFAULT_DISTRIBUTION_TEXT = 'Akan disalurkan: 21-22 Nov 2026'
+
+const formatRupiah = (value) => `Rp ${parseFloat(value || 0).toLocaleString('id-ID')}`
+const FOCUS_AREAS = [
+  { label: 'Pendidikan', icon: GraduationCap },
+  { label: 'Kesehatan', icon: Activity },
+  { label: 'Tanggap Bencana', icon: HomeIcon },
+  { label: 'Pemberdayaan UMKM', icon: HeartHandshake },
+  { label: 'Santunan Anak Yatim', icon: Heart },
+]
+
+const HOW_TO = [
+  { icon: Search, title: 'Pilih Program', desc: 'Tentukan program kebaikan yang ingin Anda bantu.' },
+  { icon: Wallet, title: 'Transfer Donasi', desc: 'Kirim ke rekening resmi yayasan sesuai nominal.' },
+  { icon: Upload, title: 'Unggah Bukti', desc: 'Unggah bukti transfer untuk diverifikasi admin.' },
+]
+
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '26 Jul 2026')
 
 export default function Home() {
   const [dbPrograms, setDbPrograms] = useState([])
@@ -26,7 +49,7 @@ export default function Home() {
     ])
       .then(([programsData, newsData, settingsData]) => {
         if (Array.isArray(programsData)) setDbPrograms(programsData)
-        
+
         const newsList = Array.isArray(newsData) ? newsData : (newsData?.data || [])
         if (Array.isArray(newsList)) setDbNews(newsList)
 
@@ -45,274 +68,238 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [dbPrograms.length])
 
-  const getImageSrc = (imagePath) => getImageUrl(imagePath)
+  if (isLoading) return <div className="loading">Memuat data...</div>
 
-  if (isLoading) {
-    return (
-      <div className="min-h-[500px] flex items-center justify-center text-slate-400" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '500px' }}>
-        Memuat data...
-      </div>
-    )
-  }
-
-  const currentHeroProgram = dbPrograms.length > 0 ? dbPrograms[activeSlide % dbPrograms.length] : null;
+  const currentHeroProgram = dbPrograms.length > 0 ? dbPrograms[activeSlide % dbPrograms.length] : null
+  const heroProgress = Math.min(currentHeroProgram?.progress || 0, 100)
+  const totalCollected = dbPrograms.reduce((sum, p) => sum + parseFloat(p.collected_amount ?? p.collected_raw ?? 0), 0)
 
   return (
     <>
-      {/* 1. HERO SECTION */}
-      <section className="hero-section">
-        <div style={{ position: 'absolute', inset: 0, borderRadius: '24px', overflow: 'hidden', zIndex: 0 }}>
-          <div className="hero-overlay"></div>
-          {dbPrograms.length > 0 ? (
-            dbPrograms.map((prog, idx) => (
-              <Image
-                key={prog.id || idx}
-                src={getImageSrc(prog.image)}
-                alt={prog.title}
-                fill
-                sizes="100vw"
-                style={{ objectFit: 'cover', opacity: idx === activeSlide ? 1 : 0, transition: 'opacity 1s ease', zIndex: 0 }}
-                priority={idx === 0}
-                loading={idx === 0 ? "eager" : "lazy"}
-              />
-            ))
-          ) : (
-            <div style={{ position: 'absolute', inset: 0, background: '#1e293b', zIndex: 0 }}></div>
-          )}
-        </div>
-        
-        <div className="hero-content" data-aos="fade-right">
-          <h1 className="hero-title">Bersama kita wujudkan masa depan yang lebih baik</h1>
-          <p className="hero-subtitle">Dukungan Anda hari ini, harapan mereka esok hari.</p>
-          {currentHeroProgram && (currentHeroProgram.location || currentHeroProgram.location_url) && (
-            <div style={{ marginBottom: '1.25rem' }}>
+      {/* 1. HERO */}
+      <div className="hero-wrap">
+        <section className="hero">
+          <div>
+            <span className="hero-badge"><span className="live-dot" /> Yayasan Sosial & Kemanusiaan</span>
+            <h1 className="hero-title">Bersama kita wujudkan <em>masa depan</em> yang lebih baik</h1>
+            <p className="hero-subtitle">Dukungan Anda hari ini, harapan mereka esok hari.</p>
+
+            {currentHeroProgram && (currentHeroProgram.location || currentHeroProgram.location_url) && (
               <a
-                href={currentHeroProgram.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
+                className="pill-link"
+                href={currentHeroProgram.location_url || DEFAULT_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.45rem',
-                  background: 'rgba(255, 255, 255, 0.16)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#fff',
-                  padding: '0.4rem 0.95rem',
-                  borderRadius: '9999px',
-                  fontSize: '0.85rem',
-                  fontWeight: '600',
-                  textDecoration: 'none',
-                  border: '1px solid rgba(255, 255, 255, 0.35)',
-                  transition: 'background 0.2s'
-                }}
                 title="Buka lokasi di Google Maps"
+                style={{ marginBottom: '1.5rem' }}
               >
                 <MapPin size={15} />
-                <span>Lokasi: {currentHeroProgram.location || 'Kampung Bamboe, Bandung'}</span>
-                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>↗</span>
+                Lokasi: {currentHeroProgram.location || DEFAULT_LOCATION} ↗
               </a>
-            </div>
-          )}
-          <div className="hero-buttons">
-            <Link
-              href={currentHeroProgram ? `/donatur?program=${currentHeroProgram.slug}` : '/donatur'}
-              className="btn-primary"
-              style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}
-            >
-              Donasi Sekarang
-            </Link>
-            {currentHeroProgram && (
-              <Link href={`/program-kami/${currentHeroProgram.slug}`} className="btn-play" style={{ textDecoration: 'none' }}>
-                <span className="play-icon"><Play size={20} style={{ marginLeft: '4px' }} /></span>
-                Lihat Program
+            )}
+
+            <div className="hero-buttons">
+              <Link href={currentHeroProgram ? `/donatur?program=${currentHeroProgram.slug}` : '/donatur'} className="btn-primary btn-lg">
+                <Heart size={18} /> Donasi Sekarang
               </Link>
+              {currentHeroProgram && (
+                <Link href={`/program-kami/${currentHeroProgram.slug}`} className="btn-outline btn-lg">
+                  Lihat Program
+                </Link>
+              )}
+            </div>
+
+            <div className="trust-row">
+              <div className="avatars" aria-hidden="true"><span>S</span><span>P</span><span>S</span></div>
+              <span><strong>245+ donatur</strong> sudah bergabung</span>
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="hero-img">
+              {dbPrograms.map((prog, idx) => (
+                <Image
+                  key={prog.id || idx}
+                  src={getImageUrl(prog.image)}
+                  alt={prog.title}
+                  fill
+                  sizes="(max-width: 960px) 100vw, 50vw"
+                  style={{ opacity: idx === activeSlide ? 1 : 0 }}
+                  priority={idx === 0}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                />
+              ))}
+            </div>
+
+            <div className="float-chip">
+              <span className="icon-box" style={{ width: 34, height: 34, borderRadius: 10 }}><ShieldCheck size={18} /></span>
+              <span>100% Transparan<small>Amanah & terpercaya</small></span>
+            </div>
+
+            {currentHeroProgram && (
+              <div className="hero-card">
+                <div className="hero-card-title">{currentHeroProgram.title}</div>
+                <div className="progress" role="progressbar" aria-valuenow={heroProgress} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="progress-fill" style={{ width: `${heroProgress}%` }} />
+                </div>
+                <div className="progress-meta">
+                  <span><strong>{formatRupiah(currentHeroProgram.collected_amount ?? currentHeroProgram.collected_raw)}</strong> terkumpul</span>
+                  <span>{currentHeroProgram.progress || 0}%</span>
+                </div>
+                <div className="progress-meta" style={{ marginTop: '0.15rem' }}>
+                  <span>Target {formatRupiah(currentHeroProgram.target_amount ?? currentHeroProgram.target_raw ?? 35000000)}</span>
+                </div>
+                {dbPrograms.length > 1 && (
+                  <div className="dots">
+                    {dbPrograms.map((_, i) => (
+                      <button key={i} className={`dot${i === activeSlide ? ' active' : ''}`} onClick={() => setActiveSlide(i)} aria-label={`Program ${i + 1}`} />
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </div>
+        </section>
+      </div>
+
+      {/* STATISTIK */}
+      <Reveal className="stats">
+        <div className="stat"><b>{dbPrograms.length}</b><span>Program Berjalan</span></div>
+        <div className="stat"><b>{formatRupiah(totalCollected)}</b><span>Dana Terkumpul</span></div>
+        <div className="stat"><b>245+</b><span>Donatur</span></div>
+        <div className="stat"><b>100%</b><span>Amanah & Transparan</span></div>
+      </Reveal>
+
+      <div className="marquee" aria-hidden="true">
+        <div className="marquee-track">
+          {[...FOCUS_AREAS, ...FOCUS_AREAS, ...FOCUS_AREAS, ...FOCUS_AREAS].map((item, i) => (
+            <span key={i} className="marquee-item"><item.icon size={16} /> {item.label}</span>
+          ))}
         </div>
+      </div>
 
-        {/* Floating Donasi Card */}
-        {currentHeroProgram && (
-          <div className="hero-floating-wrapper">
-            <div className="hero-floating-card" data-aos="fade-up" data-aos-delay="200">
-              <div className="hero-floating-stats">
-                <div className="stat-item">
-                  <h4>Terkumpul</h4>
-                  <p>Rp {parseFloat(currentHeroProgram.collected_amount ?? currentHeroProgram.collected_raw ?? 0).toLocaleString('id-ID')}</p>
-                </div>
-                <div className="stat-item">
-                  <h4>Target</h4>
-                  <p>Rp {parseFloat(currentHeroProgram.target_amount ?? currentHeroProgram.target_raw ?? 35000000).toLocaleString('id-ID')}</p>
-                </div>
-                <div className="stat-progress">
-                  <div className="progress-text">{currentHeroProgram.progress || 0}% Terkumpul</div>
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill" style={{ width: `${Math.min(currentHeroProgram.progress || 0, 100)}%` }}></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="hero-donators">
-                <div className="avatars">
-                  <img src="/avatars/1.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                  <img src="/avatars/2.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                  <img src="/avatars/3.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                </div>
-                <span className="donator-text">245+ Donatur telah bergabung</span>
-                <Link href={`/donatur?program=${currentHeroProgram.slug}`} className="btn-arrow" style={{ display: 'flex', textDecoration: 'none' }} title="Donasi untuk program ini">
-                  <ChevronRight size={20} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* 2. PROGRAM KAMI */}
+      {/* 2. PROGRAM */}
       <section className="section">
-        <div className="section-header" data-aos="fade-up">
+        <div className="section-header">
           <div>
-            <div className="section-subtitle">Pilihan Kebaikan</div>
+            <span className="eyebrow">Pilihan Kebaikan</span>
             <h2 className="section-title">Program Kami</h2>
-            <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>Bersama kita wujudkan perubahan nyata untuk mereka yang membutuhkan.</p>
+            <p className="section-lead">Bersama kita wujudkan perubahan nyata untuk mereka yang membutuhkan.</p>
           </div>
-          <Link href="/program-kami" className="btn-outline">Lihat Semua Program &rarr;</Link>
+          <Link href="/program-kami" className="btn-outline">Lihat Semua Program <ArrowRight size={16} /></Link>
         </div>
 
         <div className="grid-cards">
-          {dbPrograms.slice(0, 3).map((prog, idx) => (
-            <div key={prog.id || idx} className="card" data-aos="fade-up" data-aos-delay={`${idx * 150}`}>
-              <div className="card-img-wrapper">
-                <Image src={getImageSrc(prog.image)} alt={prog.title} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
-                <div className="card-badge-overlay">
-                  <div className="indicator"></div>
-                  {prog.progress || 0}% terkumpul
+          {dbPrograms.slice(0, 3).map((prog, idx) => {
+            const dist = getDistributionInfo(prog.distribution_date)
+            return (
+              <Reveal as="article" key={prog.id || idx} delay={idx * 100} className="card hoverable">
+                <div className="card-img-wrapper">
+                  <Image src={getImageUrl(prog.image)} alt={prog.title} fill sizes="(max-width: 768px) 100vw, 33vw" />
+                  <span className="chip">{prog.progress || 0}% terkumpul</span>
                 </div>
-              </div>
-              <div className="card-content">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
-                  <div className="card-date" style={{ margin: 0 }}>
-                    <Calendar size={13} /> {(() => {
-                      if (!prog.distribution_date) return 'Akan disalurkan: 21-22 Nov 2026'
-                      const distDate = new Date(prog.distribution_date)
-                      const isNov21 = distDate.getMonth() === 10 && (distDate.getDate() === 21 || distDate.getDate() === 22)
-                      const dateStr = isNov21 ? '21-22 Nov 2026' : distDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
-                      const today = new Date(); today.setHours(0,0,0,0); distDate.setHours(0,0,0,0)
-                      const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-                      return `Akan disalurkan: ${dateStr}${diffDays > 0 ? ` (H-${diffDays})` : ''}`
-                    })()}
+                <div className="card-content">
+                  <div className="card-meta">
+                    <span><Calendar size={13} /> {dist ? dist.text : DEFAULT_DISTRIBUTION_TEXT}</span>
+                    {(prog.location || prog.location_url) && (
+                      <a href={prog.location_url || DEFAULT_MAPS_URL} target="_blank" rel="noopener noreferrer" title="Buka lokasi di Google Maps">
+                        <MapPin size={13} />{prog.location || DEFAULT_LOCATION} ↗
+                      </a>
+                    )}
                   </div>
-                  {(prog.location || prog.location_url) && (
-                    <a
-                      href={prog.location_url || 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.25rem',
-                        fontSize: '0.75rem',
-                        fontWeight: '700',
-                        color: 'var(--color-primary)',
-                        textDecoration: 'none'
-                      }}
-                      title="Buka lokasi di Google Maps"
-                    >
-                      <MapPin size={12} /> {prog.location || 'Kampung Bamboe, Bandung'} ↗
-                    </a>
-                  )}
-                </div>
-                <h3 className="card-title">{prog.title}</h3>
-                <p className="card-desc">{prog.description}</p>
-                <div className="card-footer">
-                  <div>
-                    <div className="card-target-label">Target: <span className="card-target-val">Rp {parseFloat(prog.target_amount || 50000000).toLocaleString('id-ID')}</span></div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                    <Link href={`/donatur?program=${prog.slug}`} className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}>Donasi</Link>
-                    <Link href={`/program-kami/${prog.slug}`} className="btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>Detail</Link>
+                  <h3 className="card-title">{prog.title}</h3>
+                  <p className="card-desc">{prog.description}</p>
+                  <div className="progress-meta"><span>Target: <strong>{formatRupiah(prog.target_amount || 50000000)}</strong></span></div>
+                  <div className="card-footer">
+                    <Link href={`/donatur?program=${prog.slug}`} className="btn-primary">Donasi</Link>
+                    <Link href={`/program-kami/${prog.slug}`} className="btn-outline">Detail</Link>
                   </div>
                 </div>
-              </div>
-            </div>
+              </Reveal>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* CARA BERDONASI */}
+      <section className="section">
+        <Reveal className="section-header">
+          <div>
+            <span className="eyebrow">Mudah & Cepat</span>
+            <h2 className="section-title">Berdonasi hanya dalam 3 langkah</h2>
+          </div>
+          <Link href="/cara-berdonasi" className="btn-outline">Panduan Lengkap <ArrowRight size={16} /></Link>
+        </Reveal>
+        <div className="steps-grid">
+          {HOW_TO.map((step, i) => (
+            <Reveal key={step.title} delay={i * 100} className="step-card">
+              <span className="icon-box"><step.icon size={22} /></span>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* 3. TENTANG KAMI */}
-      <section className="section" style={{ borderTop: '1px solid var(--color-card-border)' }}>
-        <div className="tentang-grid">
-          <div className="tentang-text" data-aos="fade-right">
-            <div className="section-subtitle">Mengenal Yayasan</div>
-            <h2 className="section-title" style={{ marginBottom: '1.5rem', lineHeight: 1.2 }}>Tentang Sehati<br/>Peduli Sesama</h2>
-            <p>{webSettings.about_us}</p>
-            
-            <div className="visi-misi">
-              <div className="vm-item">
-                <div className="vm-icon"><CheckCircle2 size={24} /></div>
-                <h4>Visi Kami</h4>
+      <section className="section">
+        <div className="split">
+          <div>
+            <span className="eyebrow">Mengenal Yayasan</span>
+            <h2 className="section-title">Tentang Sehati Peduli Sesama</h2>
+            <div className="prose"><p>{webSettings.about_us}</p></div>
+
+            <div className="vm-grid" style={{ margin: '1.75rem 0' }}>
+              <div className="vm-card">
+                <span className="icon-box"><CheckCircle2 size={22} /></span>
+                <h3>Visi Kami</h3>
                 <p>{webSettings.vision}</p>
               </div>
-              <div className="vm-item">
-                <div className="vm-icon"><ShieldCheck size={24} /></div>
-                <h4>Misi Kami</h4>
+              <div className="vm-card">
+                <span className="icon-box"><ShieldCheck size={22} /></span>
+                <h3>Misi Kami</h3>
                 <p>{webSettings.mission}</p>
               </div>
             </div>
-            
-            <Link href="/tentang-kami" className="btn-primary" style={{ marginTop: '1rem' }}>Baca Selengkapnya &rarr;</Link>
+
+            <Link href="/tentang-kami" className="btn-primary">Baca Selengkapnya <ArrowRight size={16} /></Link>
           </div>
-          
-          <div className="tentang-img-wrapper" data-aos="fade-left">
-            <Image src="/tentangkami.png" alt="Tentang Kami" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: 'cover' }} />
-            <div className="tentang-badge">
-              <h4>100%</h4>
-              <p>Amanah & Transparan</p>
-              <div className="hero-donators" style={{ gap: '0.5rem' }}>
-                <div className="avatars">
-                  <img src="/avatars/1.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                  <img src="/avatars/2.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                  <img src="/avatars/3.png" alt="User" onError={(e) => { e.target.style.display = 'none' }} />
-                </div>
-                <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>245+ Donatur percaya kami</span>
-              </div>
+
+          <div className="split-img">
+            <Image src="/tentangkami.png" alt="Tentang Kami" fill sizes="(max-width: 960px) 100vw, 50vw" />
+            <div className="split-badge">
+              <span className="icon-box"><ShieldCheck size={22} /></span>
+              <span>100% Amanah & Transparan<br /><small style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>245+ Donatur percaya kami</small></span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. BERITA TERKINI */}
-      <section className="section" style={{ borderTop: '1px solid var(--color-card-border)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }} data-aos="fade-up">
-          <div className="section-subtitle">Kabar & Berita Terkini</div>
-          <h2 className="section-title">Ikuti perkembangan terbaru</h2>
-          <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', maxWidth: '500px', margin: '0.5rem auto 0' }}>
-            Kisah inspiratif, laporan kegiatan, dan informasi terbaru program-program kami.
-          </p>
+      {/* 4. BERITA */}
+      <section className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Kabar & Berita Terkini</span>
+            <h2 className="section-title">Ikuti perkembangan terbaru</h2>
+            <p className="section-lead">Kisah inspiratif, laporan kegiatan, dan informasi terbaru program-program kami.</p>
+          </div>
+          <Link href="/berita" className="btn-outline">Lihat Semua Berita <ArrowRight size={16} /></Link>
         </div>
 
         <div className="grid-cards">
           {dbNews.slice(0, 3).map((item, idx) => (
-            <div key={item.id || idx} className="card berita-card" data-aos="fade-up" data-aos-delay={`${idx * 150}`}>
-              <div className="card-img-wrapper" style={{ height: '180px' }}>
-                <Image src={getImageSrc(item.image)} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
-                <div className="card-date desktop-date">
-                  {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '26 Jul 2026'}
-                </div>
+            <Link key={item.id || idx} href={`/berita/${item.slug}`} className="card reveal in">
+              <div className="card-img-wrapper">
+                <Image src={getImageUrl(item.image)} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" />
               </div>
               <div className="card-content">
-                <div className="card-date mobile-date" style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.5rem', display: 'none' }}>
-                  {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '26 Jul 2026'}
-                </div>
-                <h3 className="card-title" style={{ fontSize: '1.1rem' }}>{item.title}</h3>
-                <p className="card-desc" style={{ fontSize: '0.8rem' }}>{item.excerpt || item.content?.replace(/<[^>]*>?/gm, '').slice(0, 100) + '...'}</p>
-                <Link href={`/berita/${item.slug}`} className="berita-link">Baca Selengkapnya &rarr;</Link>
+                <div className="card-meta"><span><Calendar size={13} /> {formatDate(item.created_at)}</span></div>
+                <h3 className="card-title">{item.title}</h3>
+                <p className="card-desc">{item.excerpt || item.content?.replace(/<[^>]*>?/gm, '').slice(0, 100) + '...'}</p>
+                <span style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.88rem' }}>Baca Selengkapnya →</span>
               </div>
-            </div>
+            </Link>
           ))}
-        </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Link href="/berita" className="btn-primary">Lihat Semua Berita &rarr;</Link>
         </div>
       </section>
     </>

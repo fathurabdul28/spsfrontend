@@ -117,7 +117,7 @@ export default function BeritaDetail() {
             </div>
 
             {/* Divider */}
-            <div style={{ height: '2px', background: 'linear-gradient(to right, var(--color-primary), transparent)', marginBottom: '2rem', borderRadius: '2px' }} />
+            <div style={{ height: '2px', background: 'var(--color-card-border)', marginBottom: '2rem', borderRadius: '2px' }} />
 
             {/* Content */}
             <div style={{
@@ -166,7 +166,7 @@ export default function BeritaDetail() {
             </div>
 
             {/* CTA Card */}
-            <div style={{ background: 'linear-gradient(135deg, var(--color-primary), #e91e8c)', borderRadius: '16px', padding: '2rem', textAlign: 'center', color: 'white' }}>
+            <div style={{ background: 'var(--color-primary)', borderRadius: '16px', padding: '2rem', textAlign: 'center', color: 'white' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '0.8rem' }}>Yuk Ikut Berdonasi!</h3>
               <p style={{ fontSize: '0.85rem', opacity: 0.9, marginBottom: '1.5rem', lineHeight: '1.5' }}>
                 Setiap rupiah yang Anda berikan membawa harapan bagi mereka yang membutuhkan.
