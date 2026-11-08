@@ -101,15 +101,14 @@ export default function LoginButton() {
               width: '34px',
               height: '34px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #a7f3d0, #6ee7b7)',
-              color: '#064e3b',
+              background: 'var(--color-primary-soft)',
+              color: 'var(--color-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: '700',
               fontSize: '0.8rem',
-              boxShadow: '0 2px 8px rgba(16,185,129,0.3)',
-              flexShrink: 0
+                            flexShrink: 0
             }}>
               {getInitials(user.name)}
             </div>

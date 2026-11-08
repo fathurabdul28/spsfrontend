@@ -84,16 +84,16 @@ export default function DonasiSaya() {
   // Map history
   const getStatusBg = (status) => {
     switch (status) {
-      case 'success': return '#dcfce7'
-      case 'pending': return '#fef08a'
-      default: return '#fee2e2'
+      case 'success': return 'rgba(21,128,61,0.14)'
+      case 'pending': return 'rgba(217,119,6,0.16)'
+      default: return 'rgba(220,38,38,0.14)'
     }
   }
   const getStatusColor = (status) => {
     switch (status) {
-      case 'success': return '#166534'
-      case 'pending': return '#854d0e'
-      default: return '#991b1b'
+      case 'success': return 'var(--color-secondary)'
+      case 'pending': return 'var(--color-accent)'
+      default: return '#ef4444'
     }
   }
   const getStatusText = (status) => {

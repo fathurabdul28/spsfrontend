@@ -43,7 +43,7 @@ export default function ProgramDetail() {
       <div style={{ minHeight: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ width: '40px', height: '40px', border: '3px solid #eee', borderTop: '3px solid #8c1532', borderRadius: '50%', margin: '0 auto 1rem', animation: 'spin 0.8s linear infinite' }} />
-          <p style={{ color: '#888', fontSize: '0.9rem' }}>Memuat program...</p>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Memuat program...</p>
         </div>
       </div>
     )
@@ -52,7 +52,7 @@ export default function ProgramDetail() {
   if (!program) {
     return (
       <div style={{ minHeight: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <p style={{ color: '#888' }}>Program tidak ditemukan</p>
+        <p style={{ color: 'var(--color-text-muted)' }}>Program tidak ditemukan</p>
       </div>
     )
   }
@@ -77,34 +77,34 @@ export default function ProgramDetail() {
       const diffDays = Math.ceil((distDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
       statusBadge = {
         text: `Akan disalurkan: ${dateText} (H-${diffDays})`,
-        color: '#1a9e5c', bg: '#e6f9f0'
+        color: '#1a9e5c', bg: 'rgba(21,128,61,0.14)'
       }
     } else if (distDate.getTime() === today.getTime()) {
-      statusBadge = { text: 'Proses penyaluran', color: '#2563eb', bg: '#eff6ff' }
+      statusBadge = { text: 'Proses penyaluran', color: '#2563eb', bg: 'rgba(37,99,235,0.14)' }
     } else {
       isFinished = true
-      statusBadge = { text: 'Selesai Disalurkan', color: '#059669', bg: '#ecfdf5' }
+      statusBadge = { text: 'Selesai Disalurkan', color: '#059669', bg: 'rgba(21,128,61,0.14)' }
     }
   }
 
   const whyReasons = [
     {
       icon: <Heart size={22} />,
-      bg: '#fce8ef',
+      bg: 'var(--color-primary-soft)',
       iconColor: '#c14670',
       title: 'Bantuan Langsung',
       desc: 'Donasi Anda akan disalurkan langsung kepada penerima manfaat.'
     },
     {
       icon: <Shield size={22} />,
-      bg: '#e8f5e0',
+      bg: 'rgba(21,128,61,0.14)',
       iconColor: '#1a9e5c',
       title: 'Transparan',
       desc: 'Kami memastikan setiap rupiah yang Anda donasikan tercatat dengan jelas.'
     },
     {
       icon: <Target size={22} />,
-      bg: '#fff7e6',
+      bg: 'rgba(217,119,6,0.14)',
       iconColor: '#d97706',
       title: 'Tepat Sasaran',
       desc: 'Program ini telah melalui proses verifikasi dan seleksi secara ketat.'
@@ -121,13 +121,13 @@ export default function ProgramDetail() {
       <section style={{ paddingTop: '1.5rem', paddingBottom: '2.5rem' }}>
 
         {/* Breadcrumb */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', color: '#999', marginBottom: '1.5rem' }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
           <Home size={12} />
-          <Link href="/" style={{ color: '#999' }}>Beranda</Link>
+          <Link href="/" style={{ color: 'var(--color-text-muted)' }}>Beranda</Link>
           <span>›</span>
-          <Link href="/program-kami" style={{ color: '#999' }}>Program</Link>
+          <Link href="/program-kami" style={{ color: 'var(--color-text-muted)' }}>Program</Link>
           <span>›</span>
-          <span style={{ color: '#333' }}>{program.title}</span>
+          <span style={{ color: 'var(--color-text)' }}>{program.title}</span>
         </nav>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr 1fr', gap: '2rem', alignItems: 'start' }}>
@@ -164,7 +164,7 @@ export default function ProgramDetail() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    background: 'rgba(140, 21, 50, 0.08)',
+                    background: 'var(--color-primary-soft)',
                     color: 'var(--color-primary)',
                     padding: '0.55rem 1.1rem',
                     borderRadius: '8px',
@@ -215,7 +215,7 @@ export default function ProgramDetail() {
             {isFinished && program.distribution_photos && program.distribution_photos.length > 0 && (
               <button onClick={() => setIsModalOpen(true)} style={{
                 marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                background: '#111', color: '#fff', padding: '0.6rem 1.2rem', borderRadius: '8px',
+                background: 'var(--color-text)', color: 'var(--background)', padding: '0.6rem 1.2rem', borderRadius: '8px',
                 cursor: 'pointer', border: 'none', fontWeight: '600', fontSize: '0.85rem'
               }}>
                 Lihat Foto Penyaluran
@@ -251,7 +251,7 @@ export default function ProgramDetail() {
               padding: '2rem 1rem 0.85rem'
             }}>
               <div style={{ height: '6px', background: 'rgba(255,255,255,0.28)', borderRadius: '4px', marginBottom: '0.45rem', overflow: 'visible', position: 'relative' }}>
-                <div style={{ height: '100%', width: `${program.progress}%`, background: '#c14670', borderRadius: '4px', position: 'relative' }}>
+                <div style={{ height: '100%', width: `${program.progress}%`, background: 'var(--color-primary)', borderRadius: '4px', position: 'relative' }}>
                   <div style={{
                     position: 'absolute', right: '-5px', top: '50%', transform: 'translateY(-50%)',
                     width: '12px', height: '12px', background: '#fff', borderRadius: '50%',
@@ -279,8 +279,8 @@ export default function ProgramDetail() {
               </h3>
 
               {/* Progress bar */}
-              <div style={{ height: '7px', background: '#f0f0f0', borderRadius: '4px', overflow: 'hidden', marginBottom: '0.85rem' }}>
-                <div style={{ height: '100%', width: `${program.progress}%`, background: 'linear-gradient(90deg, var(--color-primary), #e05c7a)', borderRadius: '4px' }} />
+              <div style={{ height: '7px', background: 'var(--color-card-alt)', borderRadius: '4px', overflow: 'hidden', marginBottom: '0.85rem' }}>
+                <div style={{ height: '100%', width: `${program.progress}%`, background: 'var(--color-secondary)', borderRadius: '4px' }} />
               </div>
 
               {/* Dana Terkumpul + Target */}
@@ -297,7 +297,7 @@ export default function ProgramDetail() {
 
               {/* Total Donatur */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: '#fce8ef', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c14670', flexShrink: 0 }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'var(--color-primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c14670', flexShrink: 0 }}>
                   <Users size={16} />
                 </div>
                 <div>
@@ -308,7 +308,7 @@ export default function ProgramDetail() {
 
               {/* Kategori */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.2rem' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: '#e8f5e0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a9e5c', flexShrink: 0 }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(21,128,61,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a9e5c', flexShrink: 0 }}>
                   <Target size={16} />
                 </div>
                 <div>
@@ -320,7 +320,7 @@ export default function ProgramDetail() {
               {/* Lokasi Camping */}
               {(program.location || program.location_url) && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.4rem' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'rgba(140, 21, 50, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'var(--color-primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
                     <MapPin size={16} />
                   </div>
                   <div>
@@ -394,7 +394,7 @@ export default function ProgramDetail() {
               </h2>
               {programDonors.length > 0 && (
                 <div style={{ position: 'relative' }}>
-                  <Search size={14} style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#aaa' }} />
+                  <Search size={14} style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
                   <input
                     type="text"
                     placeholder="Cari nama donatur..."
@@ -425,7 +425,7 @@ export default function ProgramDetail() {
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  background: 'rgba(140, 21, 50, 0.08)',
+                  background: 'var(--color-primary-soft)',
                   color: 'var(--color-primary)',
                   display: 'flex',
                   alignItems: 'center',
@@ -474,7 +474,7 @@ export default function ProgramDetail() {
                     {visibleDonors.length > 0 ? visibleDonors.map((donor, idx) => (
                       <tr key={idx} style={{ borderBottom: idx < visibleDonors.length - 1 ? '1px solid var(--color-card-border)' : 'none' }}>
                         <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: idx % 2 === 0 ? '#fce8ef' : '#e8f5e0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: idx % 2 === 0 ? '#c14670' : '#1a9e5c', flexShrink: 0, fontSize: '0.75rem', fontWeight: '700' }}>
+                          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: idx % 2 === 0 ? 'var(--color-primary-soft)' : 'rgba(21,128,61,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: idx % 2 === 0 ? '#c14670' : '#1a9e5c', flexShrink: 0, fontSize: '0.75rem', fontWeight: '700' }}>
                             {donor.name.charAt(0)}
                           </div>
                           {donor.name}
@@ -484,7 +484,7 @@ export default function ProgramDetail() {
                       </tr>
                     )) : (
                       <tr>
-                        <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', fontSize: '0.85rem', color: '#aaa' }}>Donatur tidak ditemukan</td>
+                        <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Donatur tidak ditemukan</td>
                       </tr>
                     )}
                   </tbody>
@@ -520,7 +520,7 @@ export default function ProgramDetail() {
           }}>
             <div style={{ padding: '1.3rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fce8ef', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c14670', flexShrink: 0 }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--color-primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c14670', flexShrink: 0 }}>
                   <Users size={17} />
                 </div>
                 <h4 style={{ fontSize: '0.92rem', fontWeight: '800', color: 'var(--color-text)', lineHeight: '1.3' }}>
@@ -549,15 +549,15 @@ export default function ProgramDetail() {
       {/* Modal foto penyaluran */}
       {isModalOpen && program.distribution_photos && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ position: 'relative', width: '90%', maxWidth: '800px', background: '#fff', borderRadius: '16px', padding: '1rem', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'relative', width: '90%', maxWidth: '800px', background: 'var(--color-card-bg)', color: 'var(--color-text)', borderRadius: '16px', padding: '1rem', display: 'flex', flexDirection: 'column' }}>
             <button onClick={() => setIsModalOpen(false)} style={{ alignSelf: 'flex-end', background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
             <div style={{ position: 'relative', width: '100%', height: '60vh', minHeight: '300px' }}>
               <Image src={getImageUrl(program.distribution_photos[currentPhotoIndex])} alt={`Foto Penyaluran ${currentPhotoIndex + 1}`} fill style={{ objectFit: 'contain' }} sizes="80vw" />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
-              <button disabled={currentPhotoIndex === 0} onClick={() => setCurrentPhotoIndex(p => p - 1)} style={{ padding: '0.5rem 1rem', background: '#eee', border: 'none', borderRadius: '4px', cursor: currentPhotoIndex === 0 ? 'not-allowed' : 'pointer' }}>Prev</button>
+              <button disabled={currentPhotoIndex === 0} onClick={() => setCurrentPhotoIndex(p => p - 1)} style={{ padding: '0.5rem 1rem', background: 'var(--color-card-border)', border: 'none', borderRadius: '4px', cursor: currentPhotoIndex === 0 ? 'not-allowed' : 'pointer' }}>Prev</button>
               <span style={{ fontWeight: 'bold' }}>{currentPhotoIndex + 1} / {program.distribution_photos.length}</span>
-              <button disabled={currentPhotoIndex === program.distribution_photos.length - 1} onClick={() => setCurrentPhotoIndex(p => p + 1)} style={{ padding: '0.5rem 1rem', background: '#eee', border: 'none', borderRadius: '4px', cursor: currentPhotoIndex === program.distribution_photos.length - 1 ? 'not-allowed' : 'pointer' }}>Next</button>
+              <button disabled={currentPhotoIndex === program.distribution_photos.length - 1} onClick={() => setCurrentPhotoIndex(p => p + 1)} style={{ padding: '0.5rem 1rem', background: 'var(--color-card-border)', border: 'none', borderRadius: '4px', cursor: currentPhotoIndex === program.distribution_photos.length - 1 ? 'not-allowed' : 'pointer' }}>Next</button>
             </div>
           </div>
         </div>

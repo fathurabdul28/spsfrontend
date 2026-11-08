@@ -47,21 +47,21 @@ function UploadContent() {
   }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', background: 'white', padding: '3rem', borderRadius: '12px', boxShadow: '0 10px 40px rgba(0,0,0,0.08)' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#111' }}>Konfirmasi Transfer</h1>
-      <p style={{ color: '#666', marginBottom: '2rem' }}>Silakan transfer tepat sebesar <strong>Rp {Number(amount).toLocaleString('id-ID')}</strong> ke salah satu rekening berikut:</p>
+    <div style={{ maxWidth: '600px', margin: '0 auto', background: 'var(--color-card-bg)', border: '1px solid var(--color-card-border)', padding: 'clamp(1.25rem, 4vw, 3rem)', borderRadius: 'var(--radius)' }}>
+      <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', color: 'var(--color-text)' }}>Konfirmasi Transfer</h1>
+      <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem' }}>Silakan transfer tepat sebesar <strong>Rp {Number(amount).toLocaleString('id-ID')}</strong> ke salah satu rekening berikut:</p>
       
-      <div style={{ padding: '1.5rem', background: '#f9f9f9', borderRadius: '8px', marginBottom: '2rem', border: '1px solid #ddd' }}>
-        <h3 style={{ marginBottom: '1rem', color: '#333' }}>Rekening Yayasan SPS</h3>
+      <div style={{ padding: '1.5rem', background: 'var(--color-card-alt)', borderRadius: '8px', marginBottom: '2rem', border: '1px solid var(--color-card-border)' }}>
+        <h3 style={{ marginBottom: '1rem', color: 'var(--color-text)' }}>Rekening Yayasan SPS</h3>
         <div style={{ marginBottom: '1rem' }}>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>Bank BCA</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Bank BCA</div>
           <div style={{ fontSize: '1.2rem', fontWeight: '700' }}>123-456-7890</div>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>a/n Yayasan Sehati Peduli Sesama</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>a/n Yayasan Sehati Peduli Sesama</div>
         </div>
         <div>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>Bank BSI</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Bank BSI</div>
           <div style={{ fontSize: '1.2rem', fontWeight: '700' }}>700-800-9000</div>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>a/n Yayasan Sehati Peduli Sesama</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>a/n Yayasan Sehati Peduli Sesama</div>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ function UploadContent() {
             accept="image/jpeg, image/png, image/jpg"
             onChange={(e) => setFile(e.target.files[0])}
             required
-            style={{ width: '100%', padding: '1rem', border: '1px dashed #ccc', borderRadius: '8px', cursor: 'pointer' }}
+            style={{ width: '100%', padding: '1rem', border: '1px dashed var(--color-card-border)', borderRadius: '8px', cursor: 'pointer' }}
           />
         </div>
         

@@ -221,7 +221,7 @@ function DonaturForm() {
               display: 'inline-block',
               padding: '0.35rem 1rem',
               borderRadius: '9999px',
-              background: 'rgba(140, 21, 50, 0.08)',
+              background: 'var(--color-primary-soft)',
               color: 'var(--color-primary)',
               fontSize: '0.85rem',
               fontWeight: '700',
@@ -316,7 +316,7 @@ function DonaturForm() {
                   marginTop: '0.6rem',
                   padding: '0.75rem 1rem',
                   borderRadius: '10px',
-                  background: 'rgba(140, 21, 50, 0.06)',
+                  background: 'var(--color-primary-soft)',
                   border: '1px solid rgba(140, 21, 50, 0.16)',
                   display: 'flex',
                   alignItems: 'center',
@@ -459,7 +459,7 @@ function DonaturForm() {
                 <div style={{
                   padding: '0.75rem 1rem',
                   borderRadius: '10px',
-                  background: 'rgba(140, 21, 50, 0.08)',
+                  background: 'var(--color-primary-soft)',
                   color: 'var(--color-primary)',
                   fontWeight: '600',
                   fontSize: '0.9rem',
@@ -493,7 +493,7 @@ function DonaturForm() {
                       <div style={{
                         padding: '0.4rem 0.8rem',
                         borderRadius: '8px',
-                        background: 'rgba(140, 21, 50, 0.08)',
+                        background: 'var(--color-primary-soft)',
                         color: 'var(--color-primary)',
                         fontWeight: '800',
                         fontSize: '0.9rem'
@@ -563,16 +563,16 @@ function DonaturForm() {
                     padding: '2rem 1.5rem',
                     textAlign: 'center',
                     cursor: 'pointer',
-                    background: 'rgba(140, 21, 50, 0.02)',
+                    background: 'var(--color-primary-soft)',
                     transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = 'var(--color-primary)'
-                    e.currentTarget.style.background = 'rgba(140, 21, 50, 0.05)'
+                    e.currentTarget.style.background = 'var(--color-primary-soft)'
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = 'var(--color-card-border)'
-                    e.currentTarget.style.background = 'rgba(140, 21, 50, 0.02)'
+                    e.currentTarget.style.background = 'var(--color-primary-soft)'
                   }}
                 >
                   <div style={{ fontSize: '2.4rem', marginBottom: '0.5rem' }}>📸</div>
@@ -588,7 +588,7 @@ function DonaturForm() {
                   padding: '1.2rem',
                   borderRadius: '14px',
                   border: '1.5px solid var(--color-primary)',
-                  background: 'rgba(140, 21, 50, 0.04)',
+                  background: 'var(--color-primary-soft)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '1.2rem',
@@ -604,7 +604,7 @@ function DonaturForm() {
                         position: 'relative',
                         flexShrink: 0,
                         border: '1px solid var(--color-card-border)',
-                        background: '#fff'
+                        background: 'var(--color-card-bg)'
                       }}>
                         <img
                           src={previewUrl}
